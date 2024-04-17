@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hi, any!</title>
+  </head>
+  <body>
+    <div>
+      <span>hi</span>
+      <input type="text" />
+      <button>检索</button>
+    </div>
+    <div>
+      <button onclick="addItem()">添加</button>
+    </div>
+
+    <script>
+      //查
+      function show() {}
+    </script>
+
+    <script>
+      //增
+      function addItem() {
+        // 创建一个表单元素
+        var form = document.createElement("form");
+
+        // 添加名称输入框
+        var nameLabel = document.createElement("label");
+        nameLabel.textContent = "名称: ";
+        var nameInput = document.createElement("input");
+        nameInput.setAttribute("type", "text");
+        nameLabel.appendChild(nameInput);
+        form.appendChild(nameLabel);
+
+        // 添加上传图片按钮
+        var picLabel = document.createElement("label");
+        picLabel.textContent = "上传图片: ";
+        var picInput = document.createElement("input");
+        picInput.setAttribute("type", "file");
+        picInput.setAttribute("accept", "image/*"); // 限制上传的文件类型为图片
+        picLabel.appendChild(picInput);
+        form.appendChild(picLabel);
+
+        // 添加命名原因输入框
+        var reasonLabel = document.createElement("label");
+        reasonLabel.textContent = "命名原因: ";
+        var reasonInput = document.createElement("input");
+        reasonInput.setAttribute("type", "text");
+        reasonLabel.appendChild(reasonInput);
+        form.appendChild(reasonLabel);
+
+        // 创建提交按钮
+        var submitButton = document.createElement("button");
+        submitButton.textContent = "提交";
+        form.appendChild(submitButton);
+
+        // 将表单添加到页面中
+        document.body.appendChild(form);
+
+        // 添加表单提交事件处理程序
+        form.addEventListener("submit", function (event) {
+          event.preventDefault(); // 阻止默认提交行为
+
+          // 获取输入值
+          var name = nameInput.value;
+          var pic = picInput.value;
+          var reason = reasonInput.value;
+
+          // 创建要发送到后端的数据对象
+          var data = {
+            name: name,
+            pic: pic,
+            reason: reason,
+          };
+
+          // 将输入的数据发送到后端进行处理
+          fetch("/add_item", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+
+          // 关闭表单
+          document.body.removeChild(form);
+        });
+      }
+    </script>
+  </body>
+</html>
